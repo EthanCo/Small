@@ -1,16 +1,26 @@
 # Small
 
-世界那么大，组件那么小。Small，做最轻巧的跨平台插件化框架。
+Small插件化 forked from [wequick/Small](https://github.com/wequick/Small)  
 
-[![Join the chat at https://gitter.im/wequick/Small](https://badges.gitter.im/wequick/Small.svg)](https://gitter.im/wequick/Small?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![License Apache2.0](https://img.shields.io/hexpm/l/plug.svg)][license]
+Forked Small 用于查看源码，并将阅读源码期间的理解添加至注释，方便记录。  
+
+将更随Small里程碑版本进行阅读  
+
+	v0.2 2016/1/27  
+	v0.3 2016/2/4  
+	v0.4 2016.2.17  
+	v0.5 2016/3/24  
+	v0.6 2016/3/25  
+	v0.7 2016/4/5  
+	v0.8 2016/4/12  
+	v0.9 2016/4/21  
+	v1.0 2016/6/29  
+	v1.1-beta 2016/7/21  
+	v1.1-beta5 2016/8/17  
 
 
-支持平台：[Android](Android) API 9(2.3)+  [iOS](iOS) 7.0+
+### 世界那么大，组件那么小。Small，做最轻巧的跨平台插件化框架。 ###
 
-![Small][icon]
-
-## 功能
 * **完美内置**
   - 所有插件支持内置于宿主包中
 * **高度透明**
@@ -24,45 +34,8 @@
   - 目前已支持[Android](Android)、[iOS](iOS)以及html5插件。并且三者之间可以通过同一套Javascript接口进行通信。
 
 ## 文档
-开发细节、代码原理见 [Small Wiki][wiki]
+开发细节、代码原理见 [Small Wiki](https://github.com/wequick/Small/wiki)
 
-## 协议
-Apache License 2.0
+## 入口
+[Android](https://github.com/wequick/Small/tree/master/Android)
 
-## 重要入口贴三遍
-
-[Android](Android) [Android](Android) [Android](Android)
-
-[iOS](iOS) [iOS](iOS) [iOS](iOS)
-
-# English Version
-
-A small framework to split an app into small parts.
-
-## Features
-* **Perfection built-in**
-  - All plugins are supported to build in host application.
-* **Highly transparent**
-  - The plugin codings (code, layout, etc.) are the same as a single application.
-  - Support plugin debugging just like a completion application.
-* **Ultimate slicing**
-  - Splits out any shared code and resources from plugins.
-* **Seamless connection**
-  - The host, native app bundle, native web bundle, online web page and any custom bundle can launch and pass parameters to each other with a simple URI.
-* **Cross platforms**
-  - Until now, we support Android, iOS and HTML5 plugins. In addition, they can communicate with each other through a uniform JavaScript interface.
-
-## Getting Started
-
-* [Android](Android)
-* [iOS](iOS)
-
-## Documentation
-The development details and the code principles are on [Small Wiki][wiki].
-
-## License
-Apache License 2.0
-
-[wiki]: https://github.com/wequick/Small/wiki
-[license]: https://raw.githubusercontent.com/wequick/Small/master/LICENSE
-[icon]: http://code.wequick.net/images/small-icon-512.png
