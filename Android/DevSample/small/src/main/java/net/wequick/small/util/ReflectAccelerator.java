@@ -39,6 +39,7 @@ import dalvik.system.DexFile;
 
 /**
  * This class consists exclusively of static methods that accelerate reflections.
+ * 加速反射
  */
 public class ReflectAccelerator {
     // AssetManager.addAssetPath
@@ -57,7 +58,7 @@ public class ReflectAccelerator {
     private static Method sInstrumentation_execStartActivityV21_method;
     private static Method sInstrumentation_execStartActivityV20_method;
 
-    private ReflectAccelerator() { /** cannot be instantiated */ }
+    private ReflectAccelerator() { /** cannot be instantiated */}
 
     //______________________________________________________________________________________________
     // API
@@ -78,10 +79,11 @@ public class ReflectAccelerator {
 
     /**
      * Make dex element
-     * @see <a href="https://android.googlesource.com/platform/libcore-snapshot/+/ics-mr1/dalvik/src/main/java/dalvik/system/DexPathList.java">DexPathList.java</a>
-     * @param pkg archive android package with any file extensions
+     *
+     * @param pkg     archive android package with any file extensions
      * @param dexFile
      * @return dalvik.system.DexPathList$Element
+     * @see <a href="https://android.googlesource.com/platform/libcore-snapshot/+/ics-mr1/dalvik/src/main/java/dalvik/system/DexPathList.java">DexPathList.java</a>
      */
     private static Object makeDexElement(File pkg, DexFile dexFile) throws Exception {
         if (sDexElementClass == null) {
@@ -109,7 +111,7 @@ public class ReflectAccelerator {
     }
 
     public static boolean expandDexPathList(ClassLoader cl, String dexPath,
-                                     String libraryPath, String optDexPath) {
+                                            String libraryPath, String optDexPath) {
         try {
             File pkg = new File(dexPath);
             DexFile dexFile = DexFile.loadDex(dexPath, optDexPath, 0);
@@ -124,12 +126,13 @@ public class ReflectAccelerator {
 
     /**
      * Add elements to Object[] with reflection
-     * @see <a href="https://github.com/casidiablo/multidex/blob/publishing/library/src/android/support/multidex/MultiDex.java">MultiDex</a>
+     *
      * @param target
      * @param arrField
      * @param extraElements
-     * @param push true=push to array head, false=append to array tail
+     * @param push          true=push to array head, false=append to array tail
      * @throws IllegalAccessException
+     * @see <a href="https://github.com/casidiablo/multidex/blob/publishing/library/src/android/support/multidex/MultiDex.java">MultiDex</a>
      */
     public static void expandArray(Object target, Field arrField,
                                    Object[] extraElements, boolean push)
@@ -148,7 +151,7 @@ public class ReflectAccelerator {
     }
 
     public static void sliceArray(Object target, Field arrField, int deleteIndex)
-            throws  IllegalAccessException {
+            throws IllegalAccessException {
         Object[] original = (Object[]) arrField.get(target);
         if (original.length == 0) return;
 
@@ -270,7 +273,7 @@ public class ReflectAccelerator {
             Context who, IBinder contextThread, IBinder token, Activity target,
             Intent intent, int requestCode, android.os.Bundle options) {
         if (sInstrumentation_execStartActivityV21_method == null) {
-            Class[] types = new Class[] {Context.class, IBinder.class, IBinder.class,
+            Class[] types = new Class[]{Context.class, IBinder.class, IBinder.class,
                     Activity.class, Intent.class, int.class, android.os.Bundle.class};
             sInstrumentation_execStartActivityV21_method = getMethod(Instrumentation.class,
                     "execStartActivity", types);
@@ -285,7 +288,7 @@ public class ReflectAccelerator {
             Context who, IBinder contextThread, IBinder token, Activity target,
             Intent intent, int requestCode) {
         if (sInstrumentation_execStartActivityV20_method == null) {
-            Class[] types = new Class[] {Context.class, IBinder.class, IBinder.class,
+            Class[] types = new Class[]{Context.class, IBinder.class, IBinder.class,
                     Activity.class, Intent.class, int.class};
             sInstrumentation_execStartActivityV20_method = getMethod(Instrumentation.class,
                     "execStartActivity", types);

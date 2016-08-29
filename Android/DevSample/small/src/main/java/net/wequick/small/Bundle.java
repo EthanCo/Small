@@ -47,17 +47,25 @@ import java.util.Map;
 
 /**
  * This class consists exclusively of methods that operate on apk plugin.
- *
+ * Bundle对象
+ * <p>
  * <p>All the <tt>bundles</tt> are loaded by <tt>bundle.json</tt>.
  * The <tt>bundle.json</tt> format and usage are in
  * <a href="https://github.com/wequick/Small/wiki/UI-route">UI Route</a>.
- *
+ * 所有的bundles通过bundle.json加载
+ * bundle.json的规范和使用在 https://github.com/wequick/Small/wiki/UI-route
+ * <p>
  * <p>Each bundle is resolved by <tt>BundleLauncher</tt>.
- *
+ * 每个bundle通过BundleLauncher来加载
+ * <p>
  * <p>If the <tt>pkg</tt> is specified in <tt>bundle.json</tt>,
  * the <tt>bundle</tt> is refer to a plugin file with file name in converter
  * {@code "lib" + pkg.replaceAll("\\.", "_") + ".so"}
  * and resolved by a <tt>SoBundleLauncher</tt>.
+ * 如果pkg在bundle.json中是规范的,bundle指向一个插件，它的文件名为
+ * {@code "lib" + pkg.replaceAll("\\.", "_") + ".so"}
+ * 比如: libcom_ethanco_mysmallsample_app_main，
+ * 通过SoBundleLauncher加载
  *
  * @see BundleLauncher
  */
@@ -127,11 +135,14 @@ public class Bundle {
         mListener = listener;
         Context context = Small.getContext();
         // Read manifest file
+        // 读取Manifest File
         File manifestFile = new File(context.getFilesDir(), BUNDLE_MANIFEST_NAME);
+        //删除manifest
         manifestFile.delete();
         String manifestJson;
         if (!manifestFile.exists()) {
             // Copy asset to files
+            //拷贝asset到新manifestFile
             try {
                 InputStream is = context.getAssets().open(BUNDLE_MANIFEST_NAME);
                 int size = is.available();
@@ -150,6 +161,7 @@ public class Bundle {
                 return;
             }
         } else {
+            //如果manifest还存在，直接读取
             try {
                 BufferedReader br = new BufferedReader(new FileReader(manifestFile));
                 StringBuilder sb = new StringBuilder();
@@ -167,9 +179,11 @@ public class Bundle {
             }
         }
         // Parse manifest file
+        //解析manifest文件
         try {
             JSONObject jsonObject = new JSONObject(manifestJson);
             String version = jsonObject.getString("version");
+            //加载Manifest
             loadManifest(version, jsonObject);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -412,8 +426,13 @@ public class Bundle {
         return mIntent;
     }
 
-    public Intent getIntent() { return mIntent; }
-    public void setIntent(Intent intent) { mIntent = intent; }
+    public Intent getIntent() {
+        return mIntent;
+    }
+
+    public void setIntent(Intent intent) {
+        mIntent = intent;
+    }
 
     public String getPackageName() {
         return mPackageName;
@@ -537,7 +556,9 @@ public class Bundle {
 
     public interface OnLoadListener {
         void onStart(int bundleCount, int upgradeBundlesCount, long upgradeBundlesSize);
+
         void onProgress(int bundleIndex, String bundleName, long loadedSize, long bundleSize);
+
         void onComplete(Boolean success);
     }
 
@@ -547,6 +568,7 @@ public class Bundle {
         public LoadBundleThread(JSONArray bundles) {
             this.bundleDescs = bundles;
         }
+
         @Override
         public void run() {
             List<Bundle> bundles = new ArrayList<Bundle>(bundleDescs.length());
@@ -598,6 +620,7 @@ public class Bundle {
         public LoadBundleHandler(OnLoadListener listener) {
             mListener = listener;
         }
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {

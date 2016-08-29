@@ -22,11 +22,8 @@ import net.wequick.small.Small;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -44,27 +41,43 @@ public final class FileUtils {
         unZipFolder(new FileInputStream(zipFile), outPath, null);
     }
 
+    /**
+     * 解压zip
+     *
+     * @param inStream
+     * @param outPath  输出路径
+     * @param listener
+     * @throws Exception
+     */
     public static void unZipFolder(InputStream inStream,
                                    String outPath,
                                    OnProgressListener listener) throws Exception {
+
+        //ZipInputStream Java自带压缩、解压流
         ZipInputStream inZip = new ZipInputStream(inStream);
         ZipEntry zipEntry;
-        while ((zipEntry = inZip.getNextEntry()) != null) {
+        while ((zipEntry = inZip.getNextEntry()) != null) { //循环
             String szName = zipEntry.getName();
             if (szName.startsWith("META-INF")) continue;
 
+            //如果路径是directory，则只创建文件夹
             if (zipEntry.isDirectory()) {
                 // get the folder name of the widget
+                // 获取文件夹全路径
                 szName = szName.substring(0, szName.length() - 1);
                 File folder = new File(outPath + File.separator + szName);
-                folder.mkdirs();
+                folder.mkdirs(); //创建文件夹
             } else {
+                //创建文件并写入
+
+                //创建文件
                 File file = new File(outPath + File.separator + szName);
                 if (!file.createNewFile()) {
                     System.err.println("Failed to create file: " + file);
                     return;
                 }
                 // get the output stream of the file
+                // 写入流至文件
                 FileOutputStream out = new FileOutputStream(file);
                 int len;
                 byte[] buffer = new byte[1024];
@@ -91,6 +104,12 @@ public final class FileUtils {
         return file;
     }
 
+
+    /**
+     * 获取patch下载路径
+     *
+     * @return
+     */
     public static File getDownloadBundlePath() {
         return getInternalFilesPath(DOWNLOAD_PATH);
     }

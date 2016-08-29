@@ -33,7 +33,9 @@ public class ApplicationUtils {
 
     /**
      * This method check if an <tt>uri</tt> can be opened by android system.
-     * @param uri the intent uri
+     * 判断Url能否被Android打开
+     *
+     * @param uri     the intent uri
      * @param context current context
      * @return <tt>true</tt> if <tt>uri</tt> can be opened by android system.
      */

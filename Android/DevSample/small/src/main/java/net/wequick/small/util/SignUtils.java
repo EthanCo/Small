@@ -17,16 +17,16 @@ package net.wequick.small.util;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 
 import net.wequick.small.Small;
 
 import java.io.File;
 import java.util.HashSet;
 
-import android.content.pm.Signature;
-
 /**
  * This class consists exclusively of static methods that operate on apk signature.
+ * 签名工具类
  */
 public class SignUtils {
 
@@ -35,6 +35,8 @@ public class SignUtils {
 
     /**
      * This method compare the <tt>plugin</tt> signatures with the hots one.
+     * 比较插件签名和hots one
+     *
      * @param plugin the plugin file
      * @return <tt>true</tt> if the <tt>plugin</tt> signatures same with the host's.
      */
@@ -65,6 +67,13 @@ public class SignUtils {
         return isSameSignatures(sHostSignatures, pluginInfo.signatures);
     }
 
+    /**
+     * 比较签名
+     *
+     * @param a
+     * @param b
+     * @return
+     */
     private static boolean isSameSignatures(Signature[] a, Signature[] b) {
         HashSet<Signature> sa = new HashSet<Signature>();
         HashSet<Signature> sb = new HashSet<Signature>();

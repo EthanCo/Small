@@ -43,15 +43,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class launch the plugin activity by it's class name.
- *
+ * <p>
  * <p>This class resolve the bundle who's <tt>pkg</tt> is specified as
  * <i>"*.app.*"</i> or <i>*.lib.*</i> in <tt>bundle.json</tt>.
- *
+ * <p>
  * <p>The <i>*.app.*</i> plugin contains some activities, While launching,
  * this class takes the bundle's <tt>uri</tt> as a shortcut of
  * the plugin launcher activity class name. the other activities
  * can be specified by the bundle's <tt>rules</tt>.
- *
+ * <p>
  * <p>The <i>*.lib.*</i> plugin usually consists exclusively of global methods
  * that operate on your product services.
  *
@@ -86,10 +86,13 @@ public class ApkBundleLauncher extends SoBundleLauncher {
         private static final char REDIRECT_FLAG = '>';
         private static final int STUB_ACTIVITIES_COUNT = 4;
 
-        public InstrumentationWrapper() { }
+        public InstrumentationWrapper() {
+        }
 
-        /** @Override V21+
-         * Wrap activity from REAL to STUB */
+        /**
+         * @Override V21+
+         * Wrap activity from REAL to STUB
+         */
         public ActivityResult execStartActivity(
                 Context who, IBinder contextThread, IBinder token, Activity target,
                 Intent intent, int requestCode, android.os.Bundle options) {
@@ -98,8 +101,10 @@ public class ApkBundleLauncher extends SoBundleLauncher {
                     who, contextThread, token, target, intent, requestCode, options);
         }
 
-        /** @Override V20-
-         * Wrap activity from REAL to STUB */
+        /**
+         * @Override V20-
+         * Wrap activity from REAL to STUB
+         */
         public ActivityResult execStartActivity(
                 Context who, IBinder contextThread, IBinder token, Activity target,
                 Intent intent, int requestCode) {
@@ -176,7 +181,9 @@ public class ApkBundleLauncher extends SoBundleLauncher {
 
         private String[] mStubQueue;
 
-        /** Get an usable stub activity clazz from real activity */
+        /**
+         * Get an usable stub activity clazz from real activity
+         */
         private String dequeueStubActivity(ActivityInfo ai, String realActivityClazz) {
             if (ai.launchMode == ActivityInfo.LAUNCH_MULTIPLE) {
                 // In standard mode, the stub activity is reusable.
@@ -211,7 +218,9 @@ public class ApkBundleLauncher extends SoBundleLauncher {
             return STUB_ACTIVITY_PREFIX + ai.launchMode + "$" + availableId;
         }
 
-        /** Unbind the stub activity from real activity */
+        /**
+         * Unbind the stub activity from real activity
+         */
         private void inqueueStubActivity(ActivityInfo ai, String realActivityClazz) {
             if (ai.launchMode == ActivityInfo.LAUNCH_MULTIPLE) return;
             if (mStubQueue == null) return;
@@ -234,16 +243,25 @@ public class ApkBundleLauncher extends SoBundleLauncher {
         // Inject instrumentation
         if (sHostInstrumentation == null) {
             try {
+
+                //对ActivityThread的mInstrumentation进行替换
                 final Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
+                /**
+                 *  public static ActivityThread currentActivityThread() {
+                 *      return sCurrentActivityThread;
+                 *  }
+                 */
                 final Method method = activityThreadClass.getMethod("currentActivityThread");
-                Object thread = method.invoke(null, (Object[]) null);
+                Object thread = method.invoke(null, (Object[]) null); //ActivityThread
                 Field field = activityThreadClass.getDeclaredField("mInstrumentation");
                 field.setAccessible(true);
-                sHostInstrumentation = (Instrumentation) field.get(thread);
-                Instrumentation wrapper = new InstrumentationWrapper();
-                field.set(thread, wrapper);
+                sHostInstrumentation = (Instrumentation) field.get(thread);//Instrumentation
+                Instrumentation wrapper = new InstrumentationWrapper(); //Instrumentation包装类
+                field.set(thread, wrapper); //代替Instrumentation
+
 
                 if (context instanceof Activity) {
+                    //对Activity的mInstrumentation进行替换
                     field = Activity.class.getDeclaredField("mInstrumentation");
                     field.setAccessible(true);
                     field.set(context, wrapper);
@@ -257,7 +275,7 @@ public class ApkBundleLauncher extends SoBundleLauncher {
 
     @Override
     protected String[] getSupportingTypes() {
-        return new String[] {"app", "lib"};
+        return new String[]{"app", "lib"};
     }
 
     private void unloadBundle(String packageName) {
@@ -344,7 +362,8 @@ public class ApkBundleLauncher extends SoBundleLauncher {
 
         // Record activities for intent redirection
         bundle.setEntrance(pluginInfo.activities[0].name);
-        if (sLoadedActivities == null) sLoadedActivities = new ConcurrentHashMap<String, ActivityInfo>();
+        if (sLoadedActivities == null)
+            sLoadedActivities = new ConcurrentHashMap<String, ActivityInfo>();
         for (ActivityInfo ai : pluginInfo.activities) {
             sLoadedActivities.put(ai.name, ai);
         }
@@ -366,7 +385,7 @@ public class ApkBundleLauncher extends SoBundleLauncher {
         // Intent extras - params
         String query = bundle.getQuery();
         if (query != null) {
-            intent.putExtra(Small.KEY_QUERY, '?'+query);
+            intent.putExtra(Small.KEY_QUERY, '?' + query);
         }
     }
 
@@ -404,6 +423,7 @@ public class ApkBundleLauncher extends SoBundleLauncher {
 
     /**
      * Apply plugin activity info with plugin's AndroidManifest.xml
+     *
      * @param activity
      * @param ai
      */
@@ -417,6 +437,7 @@ public class ApkBundleLauncher extends SoBundleLauncher {
 
     /**
      * Try to get plugin resource, if failed, add plugin asset path
+     *
      * @param activity
      */
     private static void ensureAddAssetPath(Activity activity) {
@@ -444,7 +465,7 @@ public class ApkBundleLauncher extends SoBundleLauncher {
             AssetManager assets = ReflectAccelerator.newAssetManager();
 
             // Add plugin asset paths
-            for (LoadedApk apk : sLoadedApks.values()){
+            for (LoadedApk apk : sLoadedApks.values()) {
                 ReflectAccelerator.addAssetPath(assets, apk.assetPath);
             }
             // Add host asset path

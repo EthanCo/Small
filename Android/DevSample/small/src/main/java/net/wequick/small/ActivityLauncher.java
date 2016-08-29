@@ -21,9 +21,11 @@ import android.content.Intent;
 
 /**
  * This class launch the host activity by it's class name.
+ * 通过类名启动 Host Activity
  *
  * <p>This class resolve the bundle who's <tt>pkg</tt> is unspecified
  * or specified as <i>"main"</i> in <tt>bundle.json</tt>.
+ * 解决 在Bundle.json
  *
  * <p>While launching, the class takes the bundle's <tt>uri</tt> as
  * the starting activity's class name.

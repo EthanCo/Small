@@ -23,9 +23,11 @@ import android.text.TextUtils;
 
 /**
  * This class resolve the bundle and launch it.
+ * 加载并启动bundle
  *
  * <p>In general the movement through a bundle launcher's lifecycle looks like
  * this:</p>
+ *一般bundle launcher的生命周期是这样的:
  *
  * <table border="2" width="85%" align="center" frame="hsides" rules="rows">
  *     <colgroup align="left" span="3" />

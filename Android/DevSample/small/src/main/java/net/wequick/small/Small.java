@@ -26,12 +26,10 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 
 import net.wequick.small.util.ApplicationUtils;
 import net.wequick.small.webkit.JsHandler;
-import net.wequick.small.webkit.JsResult;
 import net.wequick.small.webkit.WebView;
 import net.wequick.small.webkit.WebViewClient;
 
@@ -44,13 +42,16 @@ import java.util.Map;
 
 /**
  * This class consists exclusively of static methods that operate on bundle.
- *
+ * 操作Bundle
+ * <p>
+ * <p>
+ * <p>
  * <h3>Core APIs</h3>
  * <ul>
- *     <li>{@link #openUri} launch the bundle with specify activity by the <tt>uri</tt></li>
- *     <li>{@link #createObject} create object from the bundle</li>
- *     <li>{@link #setWebViewClient(WebViewClient)} customize the web view behaviors for web bundle</li>
- *     <li>{@link #registerJsHandler(String, JsHandler)} customize the javascript api for web bundle</li>
+ * <li>{@link #openUri} launch the bundle wth specify activity by the <tt>uri</tt></li>
+ * <li>{@link #createObject} create object from the bundle</li>
+ * <li>{@link #setWebViewClient(WebViewClient)} customize the web view behaviors for web bundle</li>
+ * <li>{@link #registerJsHandler(String, JsHandler)} customize the javascript api for web bundle</li>
  * </ul>
  */
 public final class Small {
@@ -79,11 +80,17 @@ public final class Small {
                         Class.forName("android.app.ActivityThread");
                 final Method method = activityThreadClass.getMethod("currentApplication");
                 sContext = (Context) method.invoke(null, (Object[]) null);
-            } catch (Exception ignored) { }
+            } catch (Exception ignored) {
+            }
         }
         return sContext;
     }
 
+    /**
+     * 设置BaseUrl
+     *
+     * @param url
+     */
     public static void setBaseUri(String url) {
         sBaseUri = url;
     }
@@ -100,12 +107,21 @@ public final class Small {
         setUp(context, null);
     }
 
+    /**
+     * 启动
+     *
+     * @param context
+     * @param listener
+     */
     public static void setUp(Context context, Bundle.OnLoadListener listener) {
         Context appContext = context.getApplicationContext();
         sContext = appContext;
+        //保存 已注册的Activity Classes
         saveActivityClasses(appContext);
+        //注册 Receiver
         LocalBroadcastManager.getInstance(appContext).registerReceiver(new OpenUriReceiver(),
                 new IntentFilter(EVENT_OPENURI));
+
 
         int backupHostVersion = getHostVersionCode();
         int currHostVersion = 0;
@@ -117,18 +133,24 @@ public final class Small {
             e.printStackTrace();
         }
         if (backupHostVersion != currHostVersion) {
+            //新HostApp版本
             sIsNewHostApp = true;
+            //保存到Sp
             setHostVersionCode(currHostVersion);
+            //清除App缓存 (包括patch)
             clearAppCache(appContext);
         } else {
             sIsNewHostApp = false;
         }
         // Register default bundle launchers
+        //注册默认需要的BundleLaunchers
         registerLauncher(new ActivityLauncher());
         registerLauncher(new ApkBundleLauncher());
         registerLauncher(new WebBundleLauncher());
+        //替换mInstrumentation
         Bundle.setupLaunchers(context);
         // Load bundles
+        //加载Bundles
         Bundle.loadLaunchableBundles(listener);
     }
 
@@ -321,6 +343,7 @@ public final class Small {
 
     /*
      * Record the registered activity classes of host.
+     * 记录已注册的Activity Classes
      */
     private static void saveActivityClasses(Context context) {
         try {
