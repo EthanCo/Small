@@ -4,7 +4,7 @@ Small插件化 forked from [wequick/Small](https://github.com/wequick/Small)
 
 Forked Small 用于查看源码，并将阅读源码期间的理解添加至注释，方便记录。  
 
-将更随Small里程碑版本进行阅读  
+将跟随Small里程碑版本进行阅读  
 
 	v0.2 2016/1/27  
 	v0.3 2016/2/4  
