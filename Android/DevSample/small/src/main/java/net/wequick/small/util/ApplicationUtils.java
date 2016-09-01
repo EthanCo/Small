@@ -54,6 +54,7 @@ public class ApplicationUtils {
     }
 
     public static void openUri(Uri uri, Context context) {
+        //通过Intent 匹配Action 启动Activity
         Intent intent = getIntentOfUri(uri);
         context.startActivity(intent);
     }

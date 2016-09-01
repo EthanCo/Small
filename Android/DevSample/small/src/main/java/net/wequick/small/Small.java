@@ -108,7 +108,7 @@ public final class Small {
     }
 
     /**
-     * 启动
+     * 初始化
      *
      * @param context
      * @param listener
@@ -143,11 +143,12 @@ public final class Small {
             sIsNewHostApp = false;
         }
         // Register default bundle launchers
-        //注册默认需要的BundleLaunchers
+        //注册默认需要的BundleLauncher
         registerLauncher(new ActivityLauncher());
         registerLauncher(new ApkBundleLauncher());
         registerLauncher(new WebBundleLauncher());
-        //替换mInstrumentation
+        //遍历 BundleLauncher列表 执行初始化
+        //只有 ApkBundleLauncher 替换mInstrumentation，其他的setUp doNothing
         Bundle.setupLaunchers(context);
         // Load bundles
         //加载Bundles
@@ -264,10 +265,13 @@ public final class Small {
         }
 
         // Small url schemes
+        //返回匹配到uri的bundle
         Bundle bundle = Bundle.getLaunchableBundle(uri);
         if (bundle != null) {
 
 //                  Log.e("Bundle","Bundle");
+
+            //启动Activity
             bundle.launchFrom(context);
         }
     }
@@ -327,6 +331,7 @@ public final class Small {
 
     /**
      * Get the activity class registered in the host's <tt>AndroidManifest.xml</tt>
+     * 获得已在Manifest中注册的Activity class
      *
      * @param clazz the activity class name
      */

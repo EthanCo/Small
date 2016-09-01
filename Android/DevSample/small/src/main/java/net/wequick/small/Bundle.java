@@ -199,6 +199,7 @@ public class Bundle {
         if (version.equals("1.0.0")) {
             try {
                 JSONArray bundles = jsonObject.getJSONArray(BUNDLES_KEY);
+                //加载Bundles.json
                 loadBundles(bundles);
                 return true;
             } catch (JSONException e) {
@@ -209,6 +210,11 @@ public class Bundle {
         throw new UnsupportedOperationException("Unknown version " + version);
     }
 
+    /**
+     * 加载Bundles.json
+     *
+     * @param bundles
+     */
     private static void loadBundles(JSONArray bundles) {
         if (mListener != null) {
             if (mThread == null) {
@@ -255,7 +261,9 @@ public class Bundle {
 
     public static Bundle getLaunchableBundle(Uri uri) {
         if (sPreloadBundles != null) {
+            //遍历sPreloadBundles
             for (Bundle bundle : sPreloadBundles) {
+                //如果匹配到uri，且enabled为true，返回该bundle
                 if (bundle.matchesRule(uri)) {
                     if (!bundle.enabled) return null; // Illegal bundle (invalid signature, etc.)
                     return bundle;
@@ -574,6 +582,7 @@ public class Bundle {
             List<Bundle> bundles = new ArrayList<Bundle>(bundleDescs.length());
             long totalSize = 0;
             // 1. Calculate size
+            //计算大小
             for (int i = 0; i < bundleDescs.length(); i++) {
                 try {
                     JSONObject object = bundleDescs.getJSONObject(i);
@@ -588,11 +597,14 @@ public class Bundle {
             sPreloadBundles = bundles;
 
             // 2. Prepare bundle | Download
+            //准备 bundle | 下载
             mHandler.obtainMessage(MSG_START, totalSize).sendToTarget();
             for (Bundle bundle : bundles) {
+                //赋值 mApplicableLauncher = launcher;
                 bundle.prepareForLaunch();
             }
             // 3. Clear upgrade urls
+            //清除升级urls
             Small.setBundleUpgradeUrls(null);
             mHandler.obtainMessage(MSG_COMPLETE).sendToTarget();
         }

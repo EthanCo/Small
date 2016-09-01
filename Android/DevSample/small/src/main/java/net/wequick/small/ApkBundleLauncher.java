@@ -43,6 +43,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class launch the plugin activity by it's class name.
+ * 通过类名启动插件Activity
  * <p>
  * <p>This class resolve the bundle who's <tt>pkg</tt> is specified as
  * <i>"*.app.*"</i> or <i>*.lib.*</i> in <tt>bundle.json</tt>.

@@ -24,6 +24,7 @@ import java.io.File;
 
 /**
  * This class resolve the bundle file with the extension of ".so".
+ * 解析后缀为".so"的Bundle file
  *
  * <p>All the bundle files are built in at application lib path ({@code bundle.getBuiltinFile()}).
  *
@@ -47,6 +48,7 @@ public abstract class SoBundleLauncher extends BundleLauncher {
         if (packageName == null) return false;
 
         // Check if supporting
+        // 检查是否是支持的类型
         String[] types = getSupportingTypes();
         if (types == null) return false;
 
@@ -60,6 +62,7 @@ public abstract class SoBundleLauncher extends BundleLauncher {
         if (!supporting) return false;
 
         // Check if has a patch
+        //检查是否有patch
         File plugin = bundle.getPatchFile();
         PackageInfo pluginInfo = getPluginInfo(plugin);
         if (pluginInfo == null) {
@@ -71,13 +74,16 @@ public abstract class SoBundleLauncher extends BundleLauncher {
         }
 
         // Verify signatures
+        //验证签名
         if (!SignUtils.verifyPlugin(pluginInfo)) {
             bundle.setEnabled(false);
             return true; // Got it, but disabled
         }
 
         // Record version code for upgrade
+        //为了升级 记录版本
         bundle.setVersionCode(pluginInfo.versionCode);
+        //存储到Sp
         Small.setBundleVersionCode(packageName, pluginInfo.versionCode);
 
         return true;
