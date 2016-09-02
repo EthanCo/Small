@@ -438,6 +438,7 @@ public class ApkBundleLauncher extends SoBundleLauncher {
 
     /**
      * Try to get plugin resource, if failed, add plugin asset path
+     * 尝试获取插件资源，如果失败，添加插件资源路径
      *
      * @param activity
      */
@@ -466,15 +467,27 @@ public class ApkBundleLauncher extends SoBundleLauncher {
             AssetManager assets = ReflectAccelerator.newAssetManager();
 
             // Add plugin asset paths
+            //添加插件资源路径
             for (LoadedApk apk : sLoadedApks.values()) {
                 ReflectAccelerator.addAssetPath(assets, apk.assetPath);
             }
             // Add host asset path
+            //添加Host资源路径
             ReflectAccelerator.addAssetPath(assets, context.getPackageResourcePath());
 
+            //
             Resources base = context.getResources();
             return new ResourcesMerger(assets,
                     base.getDisplayMetrics(), base.getConfiguration());
         }
+
+        /*安卓资源由AssertManager加载
+
+        > 应用启动时，系统会为其创建一个AssetManager实例，并由addAssetPath方法添加资源搜索路径，默认添加：
+        > 1."/framework/base.apk" - Android base resources (base)
+        > 2."/data/app*//*.apk" - The launching apk resources (host)
+
+        所有的资源需要通过一个唯一的id来访问
+        为避免id冲突，宿主以及各个插件之间的资源id需要分段处理。*/
     }
 }

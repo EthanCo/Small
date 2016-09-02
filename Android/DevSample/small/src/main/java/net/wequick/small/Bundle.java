@@ -135,9 +135,9 @@ public class Bundle {
         mListener = listener;
         Context context = Small.getContext();
         // Read manifest file
-        // 读取Manifest File
-        File manifestFile = new File(context.getFilesDir(), BUNDLE_MANIFEST_NAME);
-        //删除manifest
+        // 读取bundles.json
+        File manifestFile = new File(context.getFilesDir(), BUNDLE_MANIFEST_NAME); //BUNDLE_MANIFEST_NAME = "bundles.json";
+        //删除bundles.json
         manifestFile.delete();
         String manifestJson;
         if (!manifestFile.exists()) {

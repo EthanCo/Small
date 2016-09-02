@@ -118,7 +118,7 @@ public final class Small {
         sContext = appContext;
         //保存 已注册的Activity Classes
         saveActivityClasses(appContext);
-        //注册 Receiver
+        //注册 OpenUriReceiver
         LocalBroadcastManager.getInstance(appContext).registerReceiver(new OpenUriReceiver(),
                 new IntentFilter(EVENT_OPENURI));
 
@@ -133,13 +133,14 @@ public final class Small {
             e.printStackTrace();
         }
         if (backupHostVersion != currHostVersion) {
-            //新HostApp版本
+            //版本不相同
             sIsNewHostApp = true;
             //保存到Sp
             setHostVersionCode(currHostVersion);
             //清除App缓存 (包括patch)
             clearAppCache(appContext);
         } else {
+            //版本相同
             sIsNewHostApp = false;
         }
         // Register default bundle launchers
